@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "db:generate": "dotenv drizzle-kit generate:sqlite",
-    "db:push": "dotenv drizzle-kit push:sqlite",
+    "db:push": "dotenv drizzle-kit push:turso",
     "db:pull": "dotenv drizzle-kit introspect:sqlite",
     "db:studio": "dotenv drizzle-kit studio"
   },

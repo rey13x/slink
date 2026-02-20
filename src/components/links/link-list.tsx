@@ -38,7 +38,8 @@ export const LinkList = async () => {
   try {
     shortLinks = await fetchLinksBySessionOrCookie(session);
   } catch (err) {
-    throw new Error("Failed to fetch links");
+    console.error("Failed to fetch links:", err);
+    shortLinks = [];
   }
 
   return (

@@ -87,7 +87,7 @@ export const LinkForm = ({ renderCustomLink }: LinkFormProps) => {
                 render={({ field }) => (
                   <FormItem>
                     <FormControl>
-                      <Input placeholder="Enter the link here" {...field} />
+                      <Input placeholder="" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
