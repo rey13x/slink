@@ -31,7 +31,7 @@ export const UserProfileDialog = ({
     <ResponsiveDialog open={isOpen} onOpenChange={onOpenChange}>
       <ResponsiveDialogContent>
         <ResponsiveDialogHeader>
-          <ResponsiveDialogTitle>Profile</ResponsiveDialogTitle>
+          <ResponsiveDialogTitle>Profil</ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
         <ResponsiveDialogBody className="flex flex-col gap-4 items-center">
           <Avatar className="h-28 w-28">
@@ -47,7 +47,7 @@ export const UserProfileDialog = ({
               <div className="flex justify-between items-center">
                 <div className="flex justify-between items-center text-muted-foreground gap-2">
                   <Icons.Link className={iconVariants({ size: "sm" })} />
-                  Total created links
+                  Total tautan dibuat
                 </div>
                 <div>{user?.userLink?.totalLinks ?? 0}</div>
               </div>
@@ -57,10 +57,10 @@ export const UserProfileDialog = ({
               <div className="flex justify-between items-center">
                 <div className="flex justify-between items-center text-muted-foreground gap-2">
                   <Icons.Calendar className={iconVariants({ size: "sm" })} />
-                  Joined
+                  Bergabung
                 </div>
                 <div>
-                  {new Intl.DateTimeFormat("en-US", {
+                  {new Intl.DateTimeFormat("id-ID", {
                     dateStyle: "full",
                   }).format(new Date(user.createdAt))}
                 </div>
