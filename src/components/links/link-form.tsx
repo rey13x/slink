@@ -55,7 +55,7 @@ export const LinkForm = ({ renderCustomLink }: LinkFormProps) => {
         // Refresh untuk memastikan UI ter-update dengan data terbaru
         router.refresh();
       },
-      onError(error) {
+      onError(error: any) {
         if (error.validationErrors) {
           return setFormErrors(form, error.validationErrors);
         }
