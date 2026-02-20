@@ -90,7 +90,7 @@ export const CustomLinkForm = ({
     router.refresh();
   };
 
-  const handleError = (error: SafeActionError) => {
+  const handleError = (error: any) => {
     if (error.validationErrors) {
       return setFormErrors(form, error.validationErrors);
     }
