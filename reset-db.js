@@ -10,11 +10,11 @@ const client = createClient({
 
 async function resetDatabase() {
   console.log("Resetting database...");
-  
+
   // Drop all tables in reverse order of dependencies
   const tablesToDrop = [
     "account",
-    "session", 
+    "session",
     "link",
     "userLink",
     "verificationToken",
@@ -26,7 +26,7 @@ async function resetDatabase() {
       await client.execute(`DROP TABLE IF EXISTS "${table}"`);
       console.log(`✓ Dropped ${table}`);
     } catch (err) {
-      const msg = err?.message || String(err);
+      const msg = typeof err === 'object' && err !== null && 'message' in err ? (err as any).message : String(err);
       console.log(`  (${table} already dropped or error: ${msg})`);
     }
   }
@@ -106,10 +106,12 @@ async function resetDatabase() {
   for (const stmt of createTableStatements) {
     try {
       await client.execute(stmt);
-      const tableName = stmt.match(/CREATE (?:TABLE|INDEX|UNIQUE INDEX) "?(\w+)"?/)?.[1];
+      const tableName = stmt.match(
+        /CREATE (?:TABLE|INDEX|UNIQUE INDEX) "?(\w+)"?/,
+      )?.[1];
       console.log(`✓ Created ${tableName}`);
     } catch (err) {
-      const msg = err?.message || String(err);
+      const msg = typeof err === 'object' && err !== null && 'message' in err ? (err as any).message : String(err);
       console.error(`Error: ${msg}`);
       console.error(`Statement: ${stmt.substring(0, 100)}...`);
     }

@@ -1,7 +1,7 @@
-import { createClient } from "@libsql/client/web";
 import * as fs from "fs";
 import * as path from "path";
 import { fileURLToPath } from "url";
+import { createClient } from "@libsql/client/web";
 import { config as dotconfig } from "dotenv";
 
 dotconfig();
@@ -42,7 +42,7 @@ async function runMigrations() {
         await client.execute(stmt);
       } catch (err) {
         // Check if it's an "table already exists" error, which is fine
-        const msg = err?.message || String(err);
+        const msg = typeof err === 'object' && err !== null && 'message' in err ? (err as any).message : String(err);
         if (!msg.includes("already exists")) {
           console.error(`Error executing statement:\n${stmt}\n`, msg);
         } else {
