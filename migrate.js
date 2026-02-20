@@ -44,7 +44,7 @@ async function runMigrations() {
         // Check if it's an "table already exists" error, which is fine
         let msg = String(err);
         if (typeof err === 'object' && err !== null && 'message' in err) {
-          msg = err.message;
+          msg = typeof err.message === 'string' ? err.message : String(err.message);
         }
         if (!msg.includes("already exists")) {
           console.error(`Error executing statement:\n${stmt}\n`, msg);

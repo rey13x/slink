@@ -26,7 +26,10 @@ async function resetDatabase() {
       await client.execute(`DROP TABLE IF EXISTS "${table}"`);
       console.log(`✓ Dropped ${table}`);
     } catch (err) {
-      const msg = typeof err === 'object' && err !== null && 'message' in err ? (err as any).message : String(err);
+      let msg = String(err);
+      if (typeof err === 'object' && err !== null && 'message' in err) {
+        msg = typeof err.message === 'string' ? err.message : String(err.message);
+      }
       console.log(`  (${table} already dropped or error: ${msg})`);
     }
   }
@@ -111,7 +114,10 @@ async function resetDatabase() {
       )?.[1];
       console.log(`✓ Created ${tableName}`);
     } catch (err) {
-      const msg = typeof err === 'object' && err !== null && 'message' in err ? (err as any).message : String(err);
+      let msg = String(err);
+      if (typeof err === 'object' && err !== null && 'message' in err) {
+        msg = typeof err.message === 'string' ? err.message : String(err.message);
+      }
       console.error(`Error: ${msg}`);
       console.error(`Statement: ${stmt.substring(0, 100)}...`);
     }
