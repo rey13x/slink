@@ -4,8 +4,8 @@ import { config as dotconfig } from "dotenv";
 dotconfig();
 
 const client = createClient({
-  url: process.env.TURSO_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN,
+  url: process.env.TURSO_URL || "",
+  authToken: process.env.TURSO_AUTH_TOKEN || "",
 });
 
 async function resetDatabase() {
@@ -26,7 +26,8 @@ async function resetDatabase() {
       await client.execute(`DROP TABLE IF EXISTS "${table}"`);
       console.log(`✓ Dropped ${table}`);
     } catch (err) {
-      console.log(`  (${table} already dropped or error: ${err.message})`);
+      const error = err as any;
+      console.log(`  (${table} already dropped or error: ${error?.message})`);
     }
   }
 
@@ -108,7 +109,8 @@ async function resetDatabase() {
       const tableName = stmt.match(/CREATE (?:TABLE|INDEX|UNIQUE INDEX) "?(\w+)"?/)?.[1];
       console.log(`✓ Created ${tableName}`);
     } catch (err) {
-      console.error(`Error: ${err.message}`);
+      const error = err as any;
+      console.error(`Error: ${error?.message}`);
       console.error(`Statement: ${stmt.substring(0, 100)}...`);
     }
   }

@@ -9,8 +9,8 @@ dotconfig();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const client = createClient({
-  url: process.env.TURSO_URL,
-  authToken: process.env.TURSO_AUTH_TOKEN,
+  url: process.env.TURSO_URL || "",
+  authToken: process.env.TURSO_AUTH_TOKEN || "",
 });
 
 async function runMigrations() {
@@ -42,8 +42,9 @@ async function runMigrations() {
         await client.execute(stmt);
       } catch (err) {
         // Check if it's an "table already exists" error, which is fine
-        if (!err.message?.includes("already exists")) {
-          console.error(`Error executing statement:\n${stmt}\n`, err.message);
+        const error = err as any;
+        if (!error?.message?.includes("already exists")) {
+          console.error(`Error executing statement:\n${stmt}\n`, error?.message);
         } else {
           console.log(`  (skipping: table already exists)`);
         }
