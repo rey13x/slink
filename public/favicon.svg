@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="256" height="256">
+  <!-- Ikon Peniti/Link -->
+  <path d="M3 13a9 9 0 0 0 9 9h1.5a.75.75 0 0 0 0-1.5H12a7.5 7.5 0 1 1 0-15h1.5a.75.75 0 0 0 0-1.5H12a9 9 0 0 0 0 18z"/>
+  <circle cx="12" cy="12" r="3" fill="white"/>
+  <!-- Dekorasi lingkaran peniti di atas -->
+  <circle cx="12" cy="3" r="2" fill="white" opacity="0.7"/>
+</svg>

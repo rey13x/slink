@@ -13,7 +13,7 @@ export const metadata = {
   title: "Link Ku",
   description:
     "Shorter Link kamu secara Gratis. Dengan interface yang user-friendly, Link Ku membuat mudah untuk share dan manage links kamu.",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/favicon.svg", type: "image/svg+xml" }],
 };
 
 export default function RootLayout({
