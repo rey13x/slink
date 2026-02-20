@@ -44,9 +44,9 @@
   "expiresAt": "Expires",
   "noLinks": "No links yet. Create your first one! 🚀",
   "welcome": "Welcome!",
-  "welcomeMessage": "Slinku is a free open source tool to generate short links",
+  "welcomeMessage": "Slinku is a free tool to generate short links",
   "addFirstLink": "Add your first link",
-  "placeholder": "Slinku is a free open source tool to generate short links",
+  "placeholder": "Slinku is a free tool to generate short links",
   "download": "Download",
   "qrcode": "QR Code"
 }

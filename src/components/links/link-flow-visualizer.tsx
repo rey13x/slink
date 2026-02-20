@@ -173,7 +173,7 @@ export const LinkFlowVisualizer = ({
                 {/* Newsletter/BIO Right */}
                 <div className="flex flex-col items-center gap-2 p-3 rounded-lg bg-gradient-to-br from-blue-400/10 to-cyan-500/10 border border-cyan-400/30 hover:border-cyan-400/60 transition-colors">
                   <div className="flex items-center gap-1">
-                    <Icons.Share
+                    <Icons.Share2
                       className={`${iconVariants({
                         size: "sm",
                       })} text-cyan-400`}

@@ -154,112 +154,112 @@ export const CustomLinkForm = ({
   return (
     <>
       <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="flex flex-col w-full gap-4"
-      >
-        <FormField
-          control={form.control}
-          name="url"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>URL Tujuan</FormLabel>
-              <FormControl>
-                <Input
-                  placeholder="https://github.com/mehrabmp/cut-it"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="slug"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel className="flex w-full items-center justify-between">
-                <div>Link Pendek (opsional)</div>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  className="text-muted-foreground hover:text-foreground transition-colors flex items-center text-xs py-0 px-0 hover:bg-background h-auto"
-                  onClick={() => {
-                    const newSlug = nanoid();
-                    form.setValue("slug", newSlug);
-                    setSlug(newSlug);
-                  }}
-                >
-                  <Icons.Shuffle
-                    className={iconVariants({
-                      size: "xs",
-                      className: "mr-1",
-                    })}
-                  />
-                  Acak
-                </Button>
-              </FormLabel>
-              <FormControl>
-                <div className="relative">
-                  <Input
-                    placeholder="github"
-                    className="pe-8"
-                    {...field}
-                    onChange={(e) => {
-                      field.onChange(e);
-                      setSlug(e.target.value);
-                    }}
-                  />
-                  {isCheckingSlug && (
-                    <div className="absolute end-3 top-1/2 -translate-y-1/2 transform text-muted-foreground">
-                      <Loader />
-                    </div>
-                  )}
-                </div>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Deskripsi (opsional)</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Slinku adalah alat open source gratis untuk membuat link pendek"
-                  className="resize-none"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <Button
-          type="submit"
-          disabled={!form.formState.isDirty}
-          isLoading={isExecuting}
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col w-full gap-4"
         >
-          {isEditing
-            ? isExecuting
-              ? "Menyimpan perubahan..."
-              : "Simpan perubahan"
-            : isExecuting
-              ? "Membuat link..."
-              : "Buat link"}
-        </Button>
-      </form>
-    </Form>
-    {notificationSlug && (
-      <LinkNotification
-        slug={notificationSlug}
-        onClose={() => setNotificationSlug(null)}
-      />
-    )}
-  </>
-);
+          <FormField
+            control={form.control}
+            name="url"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>URL Tujuan</FormLabel>
+                <FormControl>
+                  <Input
+                    placeholder="https://github.com/mehrabmp/cut-it"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="slug"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="flex w-full items-center justify-between">
+                  <div>Link Pendek (opsional)</div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    className="text-muted-foreground hover:text-foreground transition-colors flex items-center text-xs py-0 px-0 hover:bg-background h-auto"
+                    onClick={() => {
+                      const newSlug = nanoid();
+                      form.setValue("slug", newSlug);
+                      setSlug(newSlug);
+                    }}
+                  >
+                    <Icons.Shuffle
+                      className={iconVariants({
+                        size: "xs",
+                        className: "mr-1",
+                      })}
+                    />
+                    Acak
+                  </Button>
+                </FormLabel>
+                <FormControl>
+                  <div className="relative">
+                    <Input
+                      placeholder="github"
+                      className="pe-8"
+                      {...field}
+                      onChange={(e) => {
+                        field.onChange(e);
+                        setSlug(e.target.value);
+                      }}
+                    />
+                    {isCheckingSlug && (
+                      <div className="absolute end-3 top-1/2 -translate-y-1/2 transform text-muted-foreground">
+                        <Loader />
+                      </div>
+                    )}
+                  </div>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Deskripsi (opsional)</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="Slinku adalah alat gratis untuk membuat link pendek"
+                    className="resize-none"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <Button
+            type="submit"
+            disabled={!form.formState.isDirty}
+            isLoading={isExecuting}
+          >
+            {isEditing
+              ? isExecuting
+                ? "Menyimpan perubahan..."
+                : "Simpan perubahan"
+              : isExecuting
+                ? "Membuat link..."
+                : "Buat link"}
+          </Button>
+        </form>
+      </Form>
+      {notificationSlug && (
+        <LinkNotification
+          slug={notificationSlug}
+          onClose={() => setNotificationSlug(null)}
+        />
+      )}
+    </>
+  );
 };

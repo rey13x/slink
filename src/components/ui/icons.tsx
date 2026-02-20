@@ -13,6 +13,7 @@ import {
   Layers,
   Link,
   LogOut,
+  Lock,
   Moon,
   MoreVertical,
   Pencil,
@@ -20,6 +21,7 @@ import {
   Scissors,
   Settings,
   Settings2,
+  Share2,
   Shuffle,
   Sun,
   Trash2,
@@ -85,6 +87,7 @@ const Icons = {
   Layers,
   Calendar,
   Link,
+  Lock,
   QrCode,
   Clipboard,
   Download,
@@ -92,6 +95,7 @@ const Icons = {
   FileImage,
   FileCode2,
   Shuffle,
+  Share2,
   Instagram,
 };
 
