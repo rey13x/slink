@@ -42,7 +42,7 @@ export function LanguageProvider({ children }: { children: React.ReactNode }) {
   };
 
   const t = (key: string): string => {
-    return (translations[language] as Record<string, string>)[key] || key;
+    return (translations[language] as Record<string, string>)[key] ?? key;
   };
 
   if (!mounted) {

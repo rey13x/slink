@@ -28,7 +28,7 @@ export function LanguageSwitcher() {
           size="icon"
           className="text-muted-foreground transition-colors hover:text-foreground"
         >
-          {currentLanguage?.label || "ID"}
+          {currentLanguage?.label ?? "ID"}
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">

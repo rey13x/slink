@@ -8,13 +8,6 @@ import {
   createShortLink,
   editShortLink,
 } from "~/server/actions/link";
-import { type ShortLink } from "~/server/db/schema";
-import { type SafeActionError } from "~/types";
-import { useAction } from "next-safe-action/hooks";
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { type z } from "zod";
-
 import { nanoid, setFormErrors } from "~/lib/utils";
 import { insertLinkSchema } from "~/lib/validations/link";
 import { useDebounce } from "~/hooks/use-debounce";
@@ -90,7 +83,7 @@ export const CustomLinkForm = ({
     router.refresh();
   };
 
-  const handleError = (error: any) => {
+  const handleError = (error: { validationErrors?: Record<string, string[]>; serverError?: string; fetchError?: string }) => {
     if (error.validationErrors) {
       return setFormErrors(form, error.validationErrors);
     }

@@ -69,11 +69,12 @@ export const createShortLink = action(
 
       revalidatePath("/");
       return { message: "Link creation successful", slug: generatedSlug };
-    } catch (error) {
-      if (error instanceof MyCustomError) {
+    } catch (err: unknown) {
+      const error = err instanceof MyCustomError ? err : null;
+      if (error) {
         throw error;
       }
-      console.error("[createShortLink] Error:", error);
+      console.error("[createShortLink] Error:", err);
       throw new MyCustomError("Failed to create link. Please try again.");
     }
   },
@@ -101,11 +102,12 @@ export const deleteShortLink = action(
       }
 
       return await deleteLinkAndRevalidate(slug, userLink.id);
-    } catch (error) {
-      if (error instanceof MyCustomError) {
+    } catch (err: unknown) {
+      const error = err instanceof MyCustomError ? err : null;
+      if (error) {
         throw error;
       }
-      console.error("[deleteShortLink] Error:", error);
+      console.error("[deleteShortLink] Error:", err);
       throw new MyCustomError("Failed to delete link. Please try again.");
     }
   },
@@ -156,18 +158,19 @@ export const editShortLink = authAction(
             await redis.set(slug.toLowerCase(), newUrl);
           }
         }
-      } catch (redisError) {
-        console.error("[@editShortLink] Redis operation failed:", redisError);
+      } catch (redisErr: unknown) {
+        console.error("[@editShortLink] Redis operation failed:", redisErr);
         // Continue anyway karena database sudah terupdate
       }
 
       revalidatePath("/");
       return { message: "Link edited successfully" };
-    } catch (error) {
-      if (error instanceof MyCustomError) {
+    } catch (err: unknown) {
+      const error = err instanceof MyCustomError ? err : null;
+      if (error) {
         throw error;
       }
-      console.error("[editShortLink] Error:", error);
+      console.error("[editShortLink] Error:", err);
       throw new MyCustomError("Failed to edit link. Please try again.");
     }
   },
