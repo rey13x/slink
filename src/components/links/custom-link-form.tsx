@@ -230,7 +230,7 @@ export const CustomLinkForm = ({
               <FormLabel>Deskripsi (opsional)</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Link Ku adalah alat open source gratis untuk membuat link pendek"
+                  placeholder="Slinku adalah alat open source gratis untuk membuat link pendek"
                   className="resize-none"
                   {...field}
                 />

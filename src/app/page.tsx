@@ -12,7 +12,7 @@ export default function Home() {
     <div className="flex flex-col items-center">
       <div className="my-10 space-y-2 text-center">
         <Heading variant="h1" className="text-3xl sm:text-4xl" isFirstBlock>
-          Shorter Link Ku
+          Shorter Slinku
         </Heading>
         <Heading
           variant="h2"

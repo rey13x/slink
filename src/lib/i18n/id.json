@@ -1,11 +1,11 @@
 {
-  "appName": "Link Ku",
+  "appName": "Slinku",
   "github": "Repository GitHub",
   "signIn": "Masuk",
   "signOut": "Keluar",
   "account": "Akun",
   "profile": "Profil",
-  "myLinks": "Link Ku",
+  "myLinks": "Slinku",
   "shortcuts": "Shortcut",
   "delete": "Hapus",
   "edit": "Edit",
@@ -44,9 +44,9 @@
   "expiresAt": "Kadaluarsa",
   "noLinks": "Belum ada link. Buat link pertama Anda! 🚀",
   "welcome": "Selamat datang!",
-  "welcomeMessage": "Link Ku adalah alat gratis open source untuk membuat link pendek",
+  "welcomeMessage": "Slinku adalah alat gratis open source untuk membuat link pendek",
   "addFirstLink": "Tambahkan link pertama Anda",
-  "placeholder": "Link Ku adalah alat gratis open source untuk membuat link pendek",
+  "placeholder": "Slinku adalah alat gratis open source untuk membuat link pendek",
   "download": "Unduh",
   "qrcode": "Kode QR"
 }

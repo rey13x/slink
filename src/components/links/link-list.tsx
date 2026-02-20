@@ -57,7 +57,7 @@ export const LinkList = async () => {
               masuk
             </span>
           </SigninDialog>{" "}
-          dan akses di Link Ku
+          dan akses di Slinku
         </div>
       )}
     </>

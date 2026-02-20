@@ -10,9 +10,9 @@ import { Header } from "~/components/layout/header";
 import { Providers } from "~/components/providers";
 
 export const metadata = {
-  title: "Link Ku",
+  title: "Slinku",
   description:
-    "Shorter Link kamu secara Gratis. Dengan interface yang user-friendly, Link Ku membuat mudah untuk share dan manage links kamu.",
+    "Shorter Link kamu secara Gratis. Dengan interface yang user-friendly, Slinku membuat mudah untuk share dan manage links kamu.",
   icons: [{ rel: "icon", url: "/favicon.svg", type: "image/svg+xml" }],
 };
 

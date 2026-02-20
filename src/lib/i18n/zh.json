@@ -1,5 +1,5 @@
 {
-  "appName": "Link Ku",
+  "appName": "Slinku",
   "github": "GitHub 仓库",
   "signIn": "登录",
   "signOut": "登出",
@@ -44,9 +44,9 @@
   "expiresAt": "过期",
   "noLinks": "还没有链接。创建您的第一个！🚀",
   "welcome": "欢迎!",
-  "welcomeMessage": "Link Ku 是一个免费的开源工具，用于生成短链接",
+  "welcomeMessage": "Slinku 是一个免费的开源工具，用于生成短链接",
   "addFirstLink": "添加您的第一个链接",
-  "placeholder": "Link Ku 是一个免费的开源工具，用于生成短链接",
+  "placeholder": "Slinku 是一个免费的开源工具，用于生成短链接",
   "download": "下载",
   "qrcode": "二维码"
 }
