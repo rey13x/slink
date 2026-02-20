@@ -26,8 +26,8 @@ async function resetDatabase() {
       await client.execute(`DROP TABLE IF EXISTS "${table}"`);
       console.log(`✓ Dropped ${table}`);
     } catch (err) {
-      const error = err as any;
-      console.log(`  (${table} already dropped or error: ${error?.message})`);
+      const msg = err?.message || String(err);
+      console.log(`  (${table} already dropped or error: ${msg})`);
     }
   }
 
@@ -109,8 +109,8 @@ async function resetDatabase() {
       const tableName = stmt.match(/CREATE (?:TABLE|INDEX|UNIQUE INDEX) "?(\w+)"?/)?.[1];
       console.log(`✓ Created ${tableName}`);
     } catch (err) {
-      const error = err as any;
-      console.error(`Error: ${error?.message}`);
+      const msg = err?.message || String(err);
+      console.error(`Error: ${msg}`);
       console.error(`Statement: ${stmt.substring(0, 100)}...`);
     }
   }
