@@ -59,7 +59,8 @@ export const LinkForm = ({ renderCustomLink }: LinkFormProps) => {
         if (error.validationErrors) {
           return setFormErrors(form, error.validationErrors);
         }
-        const errorMessage = error.serverError ?? error.fetchError ?? "Gagal membuat link";
+        const errorMessage =
+          error.serverError ?? error.fetchError ?? "Gagal membuat link";
         toast.error(errorMessage);
         console.error("Create link error:", error);
       },
