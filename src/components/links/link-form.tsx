@@ -55,12 +55,12 @@ export const LinkForm = ({ renderCustomLink }: LinkFormProps) => {
         // Refresh untuk memastikan UI ter-update dengan data terbaru
         router.refresh();
       },
-      onError(error: { validationErrors?: Record<string, string[]>; serverError?: string; fetchError?: string }) {
-        if (error.validationErrors) {
+      onError(error: any) {
+        if (error?.validationErrors) {
           return setFormErrors(form, error.validationErrors);
         }
         const errorMessage =
-          error.serverError ?? error.fetchError ?? "Gagal membuat link";
+          error?.serverError ?? error?.fetchError ?? "Gagal membuat link";
         toast.error(errorMessage);
         console.error("Create link error:", error);
       },

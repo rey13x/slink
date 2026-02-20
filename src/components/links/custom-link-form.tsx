@@ -88,11 +88,11 @@ export const CustomLinkForm = ({
     router.refresh();
   };
 
-  const handleError = (error: { validationErrors?: Record<string, string[]>; serverError?: string; fetchError?: string }) => {
-    if (error.validationErrors) {
+  const handleError = (error: any) => {
+    if (error?.validationErrors) {
       return setFormErrors(form, error.validationErrors);
     }
-    const errorMessage = error.serverError ?? error.fetchError ?? "Aksi gagal";
+    const errorMessage = error?.serverError ?? error?.fetchError ?? "Aksi gagal";
     toast.error(errorMessage);
     console.error("Action error:", error);
   };
