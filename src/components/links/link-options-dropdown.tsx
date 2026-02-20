@@ -38,17 +38,17 @@ export const LinkOptionsDropdown = ({
             type="button"
           >
             <Icons.MoreVertical className={iconVariants()} />
-            <span className="sr-only">Link actions menu</span>
+            <span className="sr-only">Pilihan link</span>
           </button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={() => setIsQRCodeDialogOpen(true)}>
             <Icons.QrCode className={iconVariants({ className: "mr-2" })} />
-            QR Code
+            Kode QR
           </DropdownMenuItem>
           <ProtectedElement
             session={session}
-            tooltipMessage="Sign in to edit links"
+            tooltipMessage="Masuk untuk edit links"
             renderElement={(disabled) => (
               <DropdownMenuItem
                 onClick={() => setIsEditLinkDialogOpen(true)}
@@ -65,7 +65,7 @@ export const LinkOptionsDropdown = ({
             disabled={link.slug === "github"}
           >
             <Icons.Trash2 className={iconVariants({ className: "mr-2" })} />
-            Delete
+            Hapus
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

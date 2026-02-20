@@ -43,7 +43,7 @@ const OAuthProviderButton = React.forwardRef<
         )}
         {isLoading
           ? `Redirecting to ${providerName}...`
-          : `Continue with ${providerName}`}
+          : `Masuk dengan ${providerName}`}
       </Button>
     );
   },

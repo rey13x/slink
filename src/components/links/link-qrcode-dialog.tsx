@@ -58,10 +58,10 @@ export const LinkQRCodeDialog = ({
       (canvas as HTMLCanvasElement).toBlob(async (blob) => {
         const data = [new ClipboardItem({ "image/png": blob! })];
         await navigator.clipboard.write(data);
-        toast("Copied to clipboard");
+        toast("Sudah dicopy!");
       });
     } catch (error) {
-      toast.error("Failed to copy QR Code");
+      toast.error("Gagal copy QR Code");
     }
   };
 
@@ -89,7 +89,7 @@ export const LinkQRCodeDialog = ({
       <ResponsiveDialog open={isOpen} onOpenChange={onOpenChange}>
         <ResponsiveDialogContent>
           <ResponsiveDialogHeader>
-            <ResponsiveDialogTitle>QR Code</ResponsiveDialogTitle>
+            <ResponsiveDialogTitle>Kode QR</ResponsiveDialogTitle>
           </ResponsiveDialogHeader>
           <ResponsiveDialogBody className="flex flex-col gap-6 items-center px-4 py-6">
             <div className="border border-slid border-border rounded-lg p-4">
@@ -111,7 +111,7 @@ export const LinkQRCodeDialog = ({
                 <Icons.Clipboard
                   className={iconVariants({ className: "mr-2" })}
                 />
-                Copy
+                Salin
               </Button>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -119,7 +119,7 @@ export const LinkQRCodeDialog = ({
                     <Icons.Download
                       className={iconVariants({ className: "mr-2" })}
                     />
-                    Download
+                    Unduh
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="center">

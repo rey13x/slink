@@ -16,7 +16,7 @@ type LinkCopyButtonProps = {
 export const LinkCopyButton = ({ textToCopy }: LinkCopyButtonProps) => {
   const handleOnCopy = async () => {
     await navigator.clipboard.writeText(textToCopy);
-    toast("Copied to clipboard");
+    toast("Sudah dicopy!");
   };
 
   return (
@@ -34,7 +34,7 @@ export const LinkCopyButton = ({ textToCopy }: LinkCopyButtonProps) => {
         </button>
       </TooltipTrigger>
       <TooltipContent>
-        <p className="font-sans">Copy link to clipboard</p>
+        <p className="font-sans">Salin link</p>
       </TooltipContent>
     </Tooltip>
   );

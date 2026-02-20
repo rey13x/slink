@@ -1,3 +1,6 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { deleteShortLink } from "~/server/actions/link";
 import { useAction } from "next-safe-action/hooks";
 import { toast } from "sonner";
@@ -24,15 +27,20 @@ export const DeleteLinkDialog = ({
   isOpen,
   onOpenChange,
 }: DeleteLinkDialogProps) => {
+  const router = useRouter();
   const { execute: deleteLink, status: deleteLinkStatus } = useAction(
     deleteShortLink,
     {
       onSuccess() {
-        toast.info("Link deleted successfully");
+        toast.info("Link berhasil dihapus");
         onOpenChange?.(false);
+        // Refresh untuk memastikan UI ter-update dengan data terbaru
+        router.refresh();
       },
       onError(error) {
-        toast.error(error.serverError ?? error.fetchError);
+        const errorMessage = error.serverError ?? error.fetchError ?? "Gagal menghapus link";
+        toast.error(errorMessage);
+        console.error("Delete link error:", error);
       },
     },
   );
@@ -41,21 +49,21 @@ export const DeleteLinkDialog = ({
     <AlertDialog open={isOpen} onOpenChange={onOpenChange}>
       <AlertDialogContent className="max-w-[22rem] sm:max-w-lg">
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>Yakin?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the link.
+            Aksi ini tidak bisa dibatalkan. Link akan dihapus permanen.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
+          <AlertDialogCancel>Batal</AlertDialogCancel>
           <Button
             variant="destructive"
             onClick={() => deleteLink({ slug })}
             isLoading={deleteLinkStatus === "executing"}
           >
             {deleteLinkStatus === "executing"
-              ? "Deleting link..."
-              : "Delete link"}
+              ? "Menghapus link..."
+              : "Hapus link"}
           </Button>
         </AlertDialogFooter>
       </AlertDialogContent>

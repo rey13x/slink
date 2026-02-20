@@ -27,120 +27,149 @@ import { redis } from "../redis";
 export const createShortLink = action(
   insertLinkSchema,
   async ({ url, slug, description }) => {
-    const session = await getServerAuthSession();
+    try {
+      const session = await getServerAuthSession();
+      let generatedSlug: string;
 
-    if (session) {
-      const userLink = await getOrCreateUserLinkByUserId(session.user.id);
+      if (session) {
+        const userLink = await getOrCreateUserLinkByUserId(session.user.id);
 
-      await generateShortLink({
-        userLinkId: userLink.id,
-        slug,
-        url,
-        description,
-      });
-    } else {
-      const cookieStore = cookies();
-      const userLinkId = cookieStore.get("user-link-id")?.value;
-      let userLink: UserLink | undefined;
-
-      if (!userLinkId) {
-        userLink = await createNewUserLink();
+        generatedSlug = await generateShortLink({
+          userLinkId: userLink.id,
+          slug,
+          url,
+          description,
+        });
       } else {
-        userLink = await getOrCreateUserLinkById(userLinkId);
+        const cookieStore = cookies();
+        const userLinkId = cookieStore.get("user-link-id")?.value;
+        let userLink: UserLink | undefined;
+
+        if (!userLinkId) {
+          userLink = await createNewUserLink();
+        } else {
+          userLink = await getOrCreateUserLinkById(userLinkId);
+        }
+
+        if (!userLink) {
+          throw new MyCustomError("Error in creating user link");
+        }
+
+        if (userLink.id !== userLinkId) {
+          setUserLinkIdCookie(userLink.id);
+        }
+
+        generatedSlug = await generateShortLink({
+          url,
+          userLinkId: userLink.id,
+          isGuestUser: true,
+          slug: "",
+        });
       }
 
-      if (!userLink) {
-        throw new MyCustomError("Error in creating user link");
+      revalidatePath("/");
+      return { message: "Link creation successful", slug: generatedSlug };
+    } catch (error) {
+      if (error instanceof MyCustomError) {
+        throw error;
       }
-
-      if (userLink.id !== userLinkId) {
-        setUserLinkIdCookie(userLink.id);
-      }
-
-      await generateShortLink({
-        url,
-        userLinkId: userLink.id,
-        isGuestUser: true,
-        slug: "",
-      });
+      console.error("[createShortLink] Error:", error);
+      throw new MyCustomError("Failed to create link. Please try again.");
     }
-
-    revalidatePath("/");
-    return { message: "Link creation successful" };
   },
 );
 
 export const deleteShortLink = action(
   z.object({ slug: z.string() }),
   async ({ slug }) => {
-    const cookieStore = cookies();
-    const userLinkIdCookie = cookieStore.get("user-link-id")?.value;
+    try {
+      const cookieStore = cookies();
+      const userLinkIdCookie = cookieStore.get("user-link-id")?.value;
 
-    if (userLinkIdCookie) {
-      return await deleteLinkAndRevalidate(slug, userLinkIdCookie);
+      if (userLinkIdCookie) {
+        return await deleteLinkAndRevalidate(slug, userLinkIdCookie);
+      }
+
+      const session = await getServerAuthSession();
+      if (!session) {
+        throw new MyCustomError("Session not found!");
+      }
+
+      const userLink = await getUserLinkByUserId(session.user.id);
+      if (!userLink) {
+        throw new MyCustomError("No user link found");
+      }
+
+      return await deleteLinkAndRevalidate(slug, userLink.id);
+    } catch (error) {
+      if (error instanceof MyCustomError) {
+        throw error;
+      }
+      console.error("[deleteShortLink] Error:", error);
+      throw new MyCustomError("Failed to delete link. Please try again.");
     }
-
-    const session = await getServerAuthSession();
-    if (!session) {
-      throw new MyCustomError("Session not found!");
-    }
-
-    const userLink = await getUserLinkByUserId(session.user.id);
-    if (!userLink) {
-      throw new MyCustomError("No user link found");
-    }
-
-    return await deleteLinkAndRevalidate(slug, userLink.id);
   },
 );
 
 export const editShortLink = authAction(
   editLinkSchema,
   async ({ slug, newLink }, { user }) => {
-    const newUrl = encodeURIComponent(newLink.url);
-    const newSlug = newLink.slug;
+    try {
+      const newUrl = encodeURIComponent(newLink.url);
+      const newSlug = newLink.slug;
 
-    const userLink = await getUserLinkByUserId(user.id);
-    if (!userLink) {
-      throw new MyCustomError("No user link found");
-    }
-
-    const link = userLink.links.find((link) => link.slug === slug);
-    if (!link) {
-      throw new MyCustomError("Link not found");
-    }
-
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const updatePromises: Promise<any>[] = [];
-
-    if (newSlug !== slug) {
-      const slugExists = await checkSlugExists(newSlug);
-      if (slugExists) {
-        throw new MyCustomError("Slug already exists");
+      const userLink = await getUserLinkByUserId(user.id);
+      if (!userLink) {
+        throw new MyCustomError("No user link found");
       }
 
-      updatePromises.push(
-        updateLinkBySlug(slug, newLink),
-        redis.del(slug.toLowerCase()),
-        redis.set(newSlug.toLowerCase(), newUrl),
-      );
-    } else {
-      updatePromises.push(
-        updateLinkBySlug(slug, {
+      const link = userLink.links.find((link) => link.slug === slug);
+      if (!link) {
+        throw new MyCustomError("Link not found");
+      }
+
+      // Update database terlebih dahulu (prioritas)
+      if (newSlug !== slug) {
+        const slugExists = await checkSlugExists(newSlug);
+        if (slugExists) {
+          throw new MyCustomError("Slug already exists");
+        }
+
+        await updateLinkBySlug(slug, { ...newLink, url: newUrl });
+      } else {
+        await updateLinkBySlug(slug, {
           ...newLink,
+          url: newUrl,
           slug: slug,
-        }),
-      );
-
-      if (newUrl !== link.url) {
-        updatePromises.push(redis.set(slug.toLowerCase(), newUrl));
+        });
       }
+
+      // Redis operations (non-critical)
+      try {
+        if (newSlug !== slug) {
+          await Promise.all([
+            redis.del(slug.toLowerCase()),
+            redis.set(newSlug.toLowerCase(), newUrl),
+          ]);
+        } else {
+          if (newUrl !== link.url) {
+            await redis.set(slug.toLowerCase(), newUrl);
+          }
+        }
+      } catch (redisError) {
+        console.error("[@editShortLink] Redis operation failed:", redisError);
+        // Continue anyway karena database sudah terupdate
+      }
+
+      revalidatePath("/");
+      return { message: "Link edited successfully" };
+    } catch (error) {
+      if (error instanceof MyCustomError) {
+        throw error;
+      }
+      console.error("[editShortLink] Error:", error);
+      throw new MyCustomError("Failed to edit link. Please try again.");
     }
-
-    await Promise.all(updatePromises);
-
-    revalidatePath("/");
-    return { message: "Link edited successfully" };
   },
 );
 

@@ -66,7 +66,7 @@ export const CustomLinkDialog = ({
       <ResponsiveDialogContent>
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>
-            {isEditing ? "Edit link" : "Create a new link"}
+            {isEditing ? "Edit link" : "Buat link baru"}
           </ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
         <ResponsiveDialogBody>

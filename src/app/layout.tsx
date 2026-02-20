@@ -10,9 +10,9 @@ import { Header } from "~/components/layout/header";
 import { Providers } from "~/components/providers";
 
 export const metadata = {
-  title: "Cut it",
+  title: "Link Ku",
   description:
-    "Open-source tool to generate short links. With a user-friendly interface and robust functionality, Cut It makes it easy to share and manage links.",
+    "Shorter Link kamu secara Gratis. Dengan interface yang user-friendly, Link Ku membuat mudah untuk share dan manage links kamu.",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
 
@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
         className={`font-sans ${GeistSans.variable} ${GeistMono.variable} flex min-h-screen flex-col`}
       >

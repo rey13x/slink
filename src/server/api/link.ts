@@ -24,7 +24,14 @@ export async function generateRandomSlug(): Promise<string> {
 }
 
 export async function checkSlugExists(slug: string): Promise<boolean> {
-  return Boolean(await redis.exists(slug.toLowerCase()));
+  // Check both Redis dan Database untuk consistency
+  const [redisExists, dbLink] = await Promise.all([
+    redis.exists(slug.toLowerCase()),
+    db.query.links.findFirst({
+      where: eq(links.slug, slug).append(sql`COLLATE NOCASE`),
+    }),
+  ]);
+  return Boolean(redisExists || dbLink);
 }
 
 export async function getLinkBySlug(
@@ -59,7 +66,7 @@ export async function generateShortLink({
   userLinkId,
   isGuestUser,
   description,
-}: NewShortLink & { isGuestUser?: boolean }): Promise<void> {
+}: NewShortLink & { isGuestUser?: boolean }): Promise<string> {
   const encodedURL = encodeURIComponent(url);
 
   if (slug) {
@@ -75,6 +82,7 @@ export async function generateShortLink({
     ? { ex: GUEST_LINK_EXPIRE_TIME }
     : undefined;
 
+  // Insert ke database terlebih dahulu (prioritas utama)
   await Promise.all([
     db
       .insert(links)
@@ -85,8 +93,17 @@ export async function generateShortLink({
       .set({ totalLinks: sql`${userLinks.totalLinks} + 1` })
       .where(eq(userLinks.id, userLinkId))
       .run(),
-    redis.set(slug.toLowerCase(), encodedURL, redisOptions),
   ]);
+
+  // Set ke Redis (non-critical, jangan throw error jika gagal)
+  try {
+    await redis.set(slug.toLowerCase(), encodedURL, redisOptions);
+  } catch (error) {
+    console.error("[@generateShortLink] Redis set failed:", error);
+    // Continue anyway karena database sudah tersimpan
+  }
+
+  return slug;
 }
 
 export async function deleteLink(
@@ -102,10 +119,16 @@ export async function deleteLink(
     throw new MyCustomError("Link not found");
   }
 
-  await Promise.all([
-    db.delete(links).where(eq(links.slug, slug)).run(),
-    redis.del(slug.toLowerCase()),
-  ]);
+  // Delete dari database (prioritas utama)
+  await db.delete(links).where(eq(links.slug, slug)).run();
+
+  // Delete dari Redis (non-critical, jangan throw error jika gagal)
+  try {
+    await redis.del(slug.toLowerCase());
+  } catch (error) {
+    console.error("[@deleteLink] Redis del failed:", error);
+    // Continue anyway karena database sudah dihapus
+  }
 }
 
 export async function deleteLinkAndRevalidate(slug: string, id: string) {

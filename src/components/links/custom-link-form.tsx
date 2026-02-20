@@ -1,4 +1,7 @@
+"use client";
+
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   checkSlug,
@@ -28,6 +31,7 @@ import { Icons, iconVariants } from "~/components/ui/icons";
 import { Input } from "~/components/ui/input";
 import { Loader } from "~/components/ui/loader";
 import { Textarea } from "~/components/ui/textarea";
+import { LinkNotification } from "~/components/links/link-notification";
 
 const formSchema = insertLinkSchema;
 
@@ -51,8 +55,10 @@ export const CustomLinkForm = ({
   isEditing = false,
   defaultValues,
 }: CustomLinkFormProps) => {
+  const router = useRouter();
   const [slug, setSlug] = useState("");
   const [isSlugExist, setIsSlugExist] = useState(false);
+  const [notificationSlug, setNotificationSlug] = useState<string | null>(null);
   const debouncedSlug = useDebounce(slug, 500);
 
   const form = useForm<FormSchema>({
@@ -64,29 +70,43 @@ export const CustomLinkForm = ({
     },
   });
 
-  const handleSuccess = () => {
-    toast.success(
-      isEditing ? "Link edited successfully" : "Link created successfully",
-    );
+  const handleCreateSuccess = (data?: { slug?: string }) => {
+    toast.success("Link berhasil dibuat");
     onSetIsDialogOpen(false);
     form.reset();
+    // Show notification dengan slug yang baru dibuat
+    if (data?.slug) {
+      setNotificationSlug(data.slug);
+    }
+    // Refresh untuk memastikan UI ter-update dengan data terbaru
+    router.refresh();
+  };
+
+  const handleEditSuccess = () => {
+    toast.success("Link berhasil diubah");
+    onSetIsDialogOpen(false);
+    form.reset();
+    // Refresh untuk memastikan UI ter-update dengan data terbaru
+    router.refresh();
   };
 
   const handleError = (error: SafeActionError) => {
     if (error.validationErrors) {
       return setFormErrors(form, error.validationErrors);
     }
-    toast.error(error.serverError ?? error.fetchError);
+    const errorMessage = error.serverError ?? error.fetchError ?? "Aksi gagal";
+    toast.error(errorMessage);
+    console.error("Action error:", error);
   };
 
   const { execute: createLink, status: createLinkStatus } = useAction(
     createShortLink,
-    { onSuccess: handleSuccess, onError: handleError },
+    { onSuccess: handleCreateSuccess, onError: handleError },
   );
 
   const { execute: editLink, status: editLinkStatus } = useAction(
     editShortLink,
-    { onSuccess: handleSuccess, onError: handleError },
+    { onSuccess: handleEditSuccess, onError: handleError },
   );
 
   const { execute: checkSlugExists, status: checkSlugExistsStatus } = useAction(
@@ -96,7 +116,7 @@ export const CustomLinkForm = ({
       onSuccess: (slugExist) => {
         if (slugExist) {
           setIsSlugExist(true);
-          form.setError("slug", { message: "Slug already exist" });
+          form.setError("slug", { message: "Slug sudah ada" });
         } else {
           setIsSlugExist(false);
           form.clearErrors("slug");
@@ -117,7 +137,7 @@ export const CustomLinkForm = ({
 
   const onSubmit = (values: FormSchema) => {
     if (isSlugExist) {
-      return form.setError("slug", { message: "Slug already exist" });
+      return form.setError("slug", { message: "Slug sudah ada" });
     }
 
     if (isEditing) {
@@ -132,7 +152,8 @@ export const CustomLinkForm = ({
   const isCheckingSlug = checkSlugExistsStatus === "executing";
 
   return (
-    <Form {...form}>
+    <>
+      <Form {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col w-full gap-4"
@@ -142,7 +163,7 @@ export const CustomLinkForm = ({
           name="url"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Destination URL</FormLabel>
+              <FormLabel>URL Tujuan</FormLabel>
               <FormControl>
                 <Input
                   placeholder="https://github.com/mehrabmp/cut-it"
@@ -159,7 +180,7 @@ export const CustomLinkForm = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel className="flex w-full items-center justify-between">
-                <div>Short Link (optional)</div>
+                <div>Link Pendek (opsional)</div>
                 <Button
                   type="button"
                   variant="ghost"
@@ -176,7 +197,7 @@ export const CustomLinkForm = ({
                       className: "mr-1",
                     })}
                   />
-                  Randomize
+                  Acak
                 </Button>
               </FormLabel>
               <FormControl>
@@ -206,10 +227,10 @@ export const CustomLinkForm = ({
           name="description"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Description (optional)</FormLabel>
+              <FormLabel>Deskripsi (opsional)</FormLabel>
               <FormControl>
                 <Textarea
-                  placeholder="Cut It is a free open source tool to generate short links"
+                  placeholder="Link Ku adalah alat open source gratis untuk membuat link pendek"
                   className="resize-none"
                   {...field}
                 />
@@ -225,13 +246,20 @@ export const CustomLinkForm = ({
         >
           {isEditing
             ? isExecuting
-              ? "Saving changes..."
-              : "Save changes"
+              ? "Menyimpan perubahan..."
+              : "Simpan perubahan"
             : isExecuting
-              ? "Creating link..."
-              : "Create link"}
+              ? "Membuat link..."
+              : "Buat link"}
         </Button>
       </form>
     </Form>
-  );
+    {notificationSlug && (
+      <LinkNotification
+        slug={notificationSlug}
+        onClose={() => setNotificationSlug(null)}
+      />
+    )}
+  </>
+);
 };

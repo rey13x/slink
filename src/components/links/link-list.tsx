@@ -51,13 +51,13 @@ export const LinkList = async () => {
       </div>
       {!session && shortLinks.length > 0 && (
         <div className="text-xs text-muted-foreground px-4">
-          Maximize your link's lifespan beyond 24 hours by{" "}
+          Shorter Link kamu lebih dari 24 jam dengan{" "}
           <SigninDialog>
             <span className="underline cursor-pointer underline-offset-4 text-foreground">
-              signing in
+              masuk
             </span>
           </SigninDialog>{" "}
-          and accessing exclusive editing features!
+          dan akses di Link Ku
         </div>
       )}
     </>

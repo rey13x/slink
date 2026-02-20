@@ -9,6 +9,7 @@ import {
   FileImage,
   HelpCircle,
   Image,
+  Instagram,
   Layers,
   Link,
   LogOut,
@@ -91,6 +92,7 @@ const Icons = {
   FileImage,
   FileCode2,
   Shuffle,
+  Instagram,
 };
 
 const iconVariants = cva("", {

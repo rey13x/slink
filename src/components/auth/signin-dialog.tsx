@@ -3,7 +3,6 @@
 import React from "react";
 import { type BuiltInProviderType } from "next-auth/providers/index";
 import { signIn, type LiteralUnion } from "next-auth/react";
-import { useTheme } from "next-themes";
 
 import {
   Dialog,
@@ -17,8 +16,6 @@ import {
 import { OAuthProviderButton } from "./oauth-provider-button";
 
 export const SigninDialog = ({ children }: { children: React.ReactNode }) => {
-  const { theme } = useTheme();
-
   const [signinProvider, setSigninProvider] =
     React.useState<LiteralUnion<BuiltInProviderType>>();
 
@@ -32,27 +29,35 @@ export const SigninDialog = ({ children }: { children: React.ReactNode }) => {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-w-[22rem] sm:max-w-sm">
         <DialogHeader className="space-y-4">
-          <DialogTitle>Sign In</DialogTitle>
-          <DialogDescription>
-            Sign in for unlimited link lifespan and extra options.
-          </DialogDescription>
+          <DialogTitle className="text-center">Masuk</DialogTitle>
         </DialogHeader>
-        <div className="flex flex-col gap-2 mt-4">
+        <div className="flex flex-col gap-2">
           <OAuthProviderButton
             provider="google"
             providerName="Google"
             isLoading={signinProvider === "google"}
             handleSignin={handleSignin}
-            variant={theme === "dark" ? "default" : "secondary"}
+            variant="default"
           />
           <OAuthProviderButton
             provider="github"
             providerName="GitHub"
             isLoading={signinProvider === "github"}
             handleSignin={handleSignin}
-            variant={theme === "dark" ? "secondary" : "default"}
+            variant="default"
           />
         </div>
+        <DialogDescription className="text-center pt-4 border-t border-slate-200">
+          Jika ada masalah login segera lapor melalui{" "}
+          <a
+            href="https://instagram.com/13bagas.exv"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-bold underline hover:opacity-80 transition-opacity"
+          >
+            Instagram
+          </a>
+        </DialogDescription>
       </DialogContent>
     </Dialog>
   );

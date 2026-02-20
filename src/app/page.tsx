@@ -12,13 +12,13 @@ export default function Home() {
     <div className="flex flex-col items-center">
       <div className="my-10 space-y-2 text-center">
         <Heading variant="h1" className="text-3xl sm:text-4xl" isFirstBlock>
-          Free URL Shortener
+          Shorter Link Ku
         </Heading>
         <Heading
           variant="h2"
           className="text-xl sm:text-2xl text-muted-foreground"
         >
-          Cut It is a free open source tool to generate short links
+          Shorter Link kamu secara Gratis
         </Heading>
       </div>
       <div className="flex items-center w-full max-w-md flex-col gap-4">

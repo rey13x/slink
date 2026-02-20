@@ -8,7 +8,7 @@ import { UserProfileDropdown } from "./user-profile-dropdown";
 
 const renderSigninDialog = () => (
   <SigninDialog>
-    <Button size="sm">Sign In</Button>
+    <Button size="sm">Masuk</Button>
   </SigninDialog>
 );
 
